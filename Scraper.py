@@ -46,17 +46,46 @@ def scrape_articles():
                 # Parse the article page
                 article_soup = BeautifulSoup(article_page.text, "html.parser")
 
-                # Find the header (h2) and paragraphs (p) in the article
-                article_header = article_soup.find("h2").get_text() if article_soup.find("h2") else "No header found"
-                article_content = [p.get_text() for p in article_soup.find_all("p")]
+                # Remove the "Kommentare" section and any other unwanted sections
+                if article_soup.find("section", class_="additionals"):
+                    article_soup.find("section", class_="additionals").decompose()  # Remove the comments section
+
+                # Remove the "Newsletter" section (and any other content in the footer)
+                if article_soup.find("footer"):
+                    article_soup.find("footer").decompose()  # Remove the entire footer
+
+                # Remove any other newsletter-related sections
+                if article_soup.find("section", id="footer-newsletter"):
+                    article_soup.find("section", id="footer-newsletter").decompose()  # Remove the newsletter section
+
+                # Check if the page has a header and extract it, otherwise handle missing header
+                article_header = article_soup.find("h1") or article_soup.find("h2")
+                if article_header:
+                    article_header_text = article_header.get_text().strip()
+                else:
+                    article_header_text = "No header found"
+
+                # Extract content paragraphs and remove unwanted ones like "Newsletter"
+                article_content = [p.get_text().strip() for p in article_soup.find_all("p") if "Newsletter" not in p.get_text()]
 
                 # Combine the article content into a single string
-                full_content = article_header + "\n" + "\n".join(article_content)
+                full_content = article_header_text + "\n" + "\n".join(article_content)
 
-                # Write the full content to the file
-                file.write(f"Header: {article_header}\n")
+                # Remove any unwanted footer text
+                unwanted_footer_markers = [
+                    "© Motorsport-Magazin",
+                    "AnmeldenRegistrierenJetzt Plus-Vorteile"
+                ]
+
+                # Remove any part of the content after an unwanted footer marker is found
+                for marker in unwanted_footer_markers:
+                    if marker in full_content:
+                        full_content = full_content.split(marker)[0]
+
+                # Write the filtered content to the file
+                file.write(f"Header: {article_header_text}\n")
                 file.write("Content:\n")
-                file.write(full_content + "\n")
+                file.write(full_content.strip() + "\n")
                 file.write("\n---\n")
 
     return file_path

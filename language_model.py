@@ -1,9 +1,14 @@
 # LLM.py
 import cohere
+import os
 from tqdm import tqdm  # Add tqdm for progress bar
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up your Cohere API key
-co = cohere.Client('X0fzsb3dji0CWtTMkYAJxexZ4gkU5eFOVDwSfypO')
+co = cohere.Client(os.getenv('COHERE_API_KEY'))
 
 def summarize_content_with_cohere(content):
     try:
