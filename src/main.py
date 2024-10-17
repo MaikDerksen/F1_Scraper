@@ -2,9 +2,9 @@
 import os
 import time
 from scraper import scrape_articles
-from language_model import summarize_content_with_cohere
+from language_model import summarize_content_with_tinyllama
 from summarize import read_latest_file
-from send_message import send_whatsapp_messageT
+from mail_sender import send_email
 
 def summarize_latest_file():
     # Step 1: Scraping the latest articles
@@ -24,7 +24,7 @@ def summarize_latest_file():
     # Step 3: Generating a summary using Cohere API
     print("Step 3: Generating a summary using Cohere API...")
     start_time = time.time()  # Start timing
-    summary = summarize_content_with_cohere(content)
+    summary = summarize_content_with_tinyllama(content)
     end_time = time.time()  # End timing
     print(f"Step 3 completed in {end_time - start_time:.2f} seconds.")
 
@@ -42,10 +42,10 @@ def summarize_latest_file():
     end_time = time.time()  # End timing
     print(f"Step 4 completed in {end_time - start_time:.2f} seconds.")
 
-    # Step 5: Sending summary via WhatsApp
-    print(f"Step 5: Sending summary via WhatsApp...")
+    # Step 5: Sending summary via Gmail
+    print(f"Step 5: Sending summary via Gmail...")
     start_time = time.time()  # Start timing
-    send_whatsapp_messageT(summary_filename)
+    send_email(summary_filename)
     end_time = time.time()  # End timing
     print(f"Step 5 completed in {end_time - start_time:.2f} seconds.")
 
