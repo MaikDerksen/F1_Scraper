@@ -7,25 +7,25 @@ from mail_sender import send_email
 
 def summarize_latest_file():
     # Step 1: Scraping the latest articles and saving in 'results' folder
-    print("Step 1: Scraping the latest articles...")
+    print("\nStep 1: Scraping the latest articles...")
     start_time = time.time()  # Start timing
     latest_file = scrape_articles()  # The file will be saved in the 'results' folder in the root project directory
     end_time = time.time()  # End timing
-    print(f"Step 1 completed in {end_time - start_time:.2f} seconds.")
+    print(f"Step 1 completed in {end_time - start_time:.2f} seconds.\n")
 
     # Step 2: Reading the content from the latest file in 'results' folder
     print(f"Step 2: Reading the content from {latest_file}...")
     start_time = time.time()  # Start timing
     content = read_latest_file(latest_file)
     end_time = time.time()  # End timing
-    print(f"Step 2 completed in {end_time - start_time:.2f} seconds.")
+    print(f"Step 2: completed in {end_time - start_time:.2f} seconds.\n")
 
     # Step 3: Generating a summary using TinyLlama
     print("Step 3: Generating a summary using TinyLlama...")
     start_time = time.time()  # Start timing
     summary = summarize_content_with_tinyllama(content)
     end_time = time.time()  # End timing
-    print(f"Step 3 completed in {end_time - start_time:.2f} seconds.")
+    print(f"Step 3: completed in {end_time - start_time:.2f} seconds.\n")
 
     # Define the directory for the summaries (root directory 'summaries/')
     summary_dir = 'summaries'
@@ -43,14 +43,14 @@ def summarize_latest_file():
     with open(summary_filename, 'w', encoding='utf-8') as summary_file:
         summary_file.write(summary)
     end_time = time.time()  # End timing
-    print(f"Step 4 completed in {end_time - start_time:.2f} seconds.")
+    print(f"Step 4: completed in {end_time - start_time:.2f} seconds.\n")
 
     # Step 5: Sending the summary via Gmail
     print(f"Step 5: Sending summary via Gmail...")
     start_time = time.time()  # Start timing
     send_email(summary_filename)
     end_time = time.time()  # End timing
-    print(f"Step 5 completed in {end_time - start_time:.2f} seconds.")
+    print(f"Step 5: completed in {end_time - start_time:.2f} seconds.\n")
 
     print(f"Summary saved to: {summary_filename}")
 
