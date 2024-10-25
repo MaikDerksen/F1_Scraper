@@ -2,7 +2,7 @@ import os
 import time
 from scraper import scrape_articles
 from summarize import read_latest_file
-from language_model import summarize_content_with_tinyllama
+from language_model import summarize_content_by_header
 from mail_sender import send_email
 
 def summarize_latest_file():
@@ -23,7 +23,7 @@ def summarize_latest_file():
     # Step 3: Generating a summary using TinyLlama
     print("Step 3: Generating a summary using TinyLlama...")
     start_time = time.time()  # Start timing
-    summary = summarize_content_with_tinyllama(content)
+    summary = summarize_content_by_header(content)
     end_time = time.time()  # End timing
     print(f"Step 3: completed in {end_time - start_time:.2f} seconds.\n")
 

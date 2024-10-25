@@ -38,6 +38,10 @@ def scrape_articles():
                 if link and "href" in link.attrs:
                     # Extract the href (URL) and build the full URL if needed
                     article_url = link["href"]
+                    if "bilder" in article_url:
+                        continue
+                    if "video" in article_url:
+                        continue
                     if not article_url.startswith("http"):
                         article_url = "https://www.motorsport-magazin.com" + article_url
 
